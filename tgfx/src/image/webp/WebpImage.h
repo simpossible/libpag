@@ -19,9 +19,9 @@
 #pragma once
 
 #include "image/Image.h"
-#include "webp/decode.h"
-#include "webp/demux.h"
-#include "webp/encode.h"
+#include <WebP/decode.h>
+#include <WebP/demux.h>
+#include <WebP/encode.h>
 
 namespace pag {
 class WebpImage : public Image {

@@ -1,6 +1,6 @@
 PAG_ROOT = __dir__
 
-vendorNames = "pathkit skcms libwebp"
+vendorNames = "skcms libwebp"
 commonCFlags = ["-DGLES_SILENCE_DEPRECATION -DTGFX_USE_WEBP_DECODE -DPAG_DLL -fvisibility=hidden -Wall -Wextra -Weffc++ -pedantic -Werror=return-type"]
 # PAG_USE_FREETYPE=ON pod install
 if ENV["PAG_USE_FREETYPE"] == 'ON'
@@ -20,13 +20,13 @@ if ENV["PAG_USE_LIBAVC"] != 'OFF'
   commonCFlags += ["-DPAG_USE_LIBAVC"]
 end
 
-if  ENV["PLATFORM"] == "mac"
-  system("depsync mac")
-  system("node build_vendor #{vendorNames} -o #{PAG_ROOT}/mac/Pods/pag-vendor -p mac")
-else
-  system("depsync ios")
-  system("node build_vendor #{vendorNames} -o #{PAG_ROOT}/ios/Pods/pag-vendor -p ios --fatLib")
-end
+#if  ENV["PLATFORM"] == "mac"
+#  system("depsync mac")
+#  system("node build_vendor #{vendorNames} -o #{PAG_ROOT}/mac/Pods/pag-vendor -p mac")
+#else
+#  system("depsync ios")
+#  system("node build_vendor #{vendorNames} -o #{PAG_ROOT}/ios/Pods/pag-vendor -p ios --fatLib")
+#end
 
 Pod::Spec.new do |s|
   s.name     = 'libpag'
@@ -47,6 +47,7 @@ Pod::Spec.new do |s|
                     'include/pag/file.h',
                     'include/pag/pag.h',
                     'src/base/**/*.{h,cpp}',
+
                     'src/codec/**/*.{h,cpp}',
                     'src/video/**/*.{h,cpp}',
                     'src/rendering/**/*.{h,cpp}',
@@ -76,8 +77,9 @@ Pod::Spec.new do |s|
 
   s.ios.public_header_files = 'src/platform/ios/*.h',
                               'src/platform/cocoa/*.h'
-                              
+                     
   s.ios.source_files =  'src/platform/ios/*.{h,cpp,mm,m}',
+                          'src/base/**/*.{h,cpp,mm}',
                           'src/platform/ios/private/*.{h,cpp,mm,m}',
                           'src/platform/cocoa/**/*.{h,cpp,mm,m}',
                           'tgfx/src/gpu/opengl/eagl/*.{h,cpp,mm}',
@@ -87,10 +89,23 @@ Pod::Spec.new do |s|
   s.ios.frameworks   = ['UIKit', 'CoreFoundation', 'QuartzCore', 'CoreGraphics', 'CoreText', 'OpenGLES', 'VideoToolbox', 'CoreMedia']
   s.ios.libraries = ["iconv"]
 
-  s.xcconfig = {'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17','CLANG_CXX_LIBRARY' => 'libc++',"HEADER_SEARCH_PATHS" => "#{PAG_ROOT}/src #{PAG_ROOT}/include #{PAG_ROOT}/tgfx/src #{PAG_ROOT}/tgfx/include #{PAG_ROOT}/third_party/pathkit #{PAG_ROOT}/third_party/skcms #{PAG_ROOT}/third_party/freetype/include #{PAG_ROOT}/third_party/libwebp/src #{PAG_ROOT}/third_party/libavc/common #{PAG_ROOT}/third_party/libavc/decoder"}
+  s.dependency "pathkit"
+  s.dependency "WebP"
+  s.dependency "avcdec"
+  s.dependency "skcms"
+  s.static_framework = true
+
+  s.xcconfig = {'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17','CLANG_CXX_LIBRARY' => 'libc++',"HEADER_SEARCH_PATHS" => "#{PAG_ROOT}/src #{PAG_ROOT}/include #{PAG_ROOT}/tgfx/src #{PAG_ROOT}/tgfx/include"}
   s.ios.xcconfig = {"OTHER_CFLAGS" => commonCFlags.join(" "),"EXPORTED_SYMBOLS_FILE" => "${PODS_ROOT}/../libpag.lds","OTHER_LDFLAGS" => "-w","VALIDATE_WORKSPACE_SKIPPED_SDK_FRAMEWORKS" => "OpenGLES"}
   s.osx.xcconfig = {"OTHER_CFLAGS" => commonCFlags.join(" ")}
-  s.ios.vendored_libraries = 'ios/Pods/pag-vendor/libpag-vendor.a'
-  s.osx.vendored_libraries = 'mac/Pods/pag-vendor/x64/libpag-vendor.a'
+  # s.ios.vendored_libraries = 'ios/Pods/pag-vendor/libpag-vendor.a'
+  # s.osx.vendored_libraries = 'mac/Pods/pag-vendor/x64/libpag-vendor.a'
+
+
+  # s.xcconfig = {'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17','CLANG_CXX_LIBRARY' => 'libc++',"HEADER_SEARCH_PATHS" => "#{PAG_ROOT}/src #{PAG_ROOT}/include #{PAG_ROOT}/tgfx/src #{PAG_ROOT}/tgfx/include #{PAG_ROOT}/third_party/pathkit #{PAG_ROOT}/third_party/skcms #{PAG_ROOT}/third_party/freetype/include #{PAG_ROOT}/third_party/libwebp/src #{PAG_ROOT}/third_party/libavc/common #{PAG_ROOT}/third_party/libavc/decoder"}
+  # s.ios.xcconfig = {"OTHER_CFLAGS" => commonCFlags.join(" "),"EXPORTED_SYMBOLS_FILE" => "${PODS_ROOT}/../libpag.lds","OTHER_LDFLAGS" => "-w","VALIDATE_WORKSPACE_SKIPPED_SDK_FRAMEWORKS" => "OpenGLES"}
+  # s.osx.xcconfig = {"OTHER_CFLAGS" => commonCFlags.join(" ")}
+  # s.ios.vendored_libraries = 'ios/Pods/pag-vendor/libpag-vendor.a'
+  # s.osx.vendored_libraries = 'mac/Pods/pag-vendor/x64/libpag-vendor.a'
 
 end

@@ -21,9 +21,9 @@
 #include <cstdio>
 #include "image/utils/OrientationHelper.h"
 #include "base/utils/Log.h"
-#include "webp/decode.h"
-#include "webp/demux.h"
-#include "webp/encode.h"
+#include <WebP/decode.h>
+#include <WebP/demux.h>
+#include <WebP/encode.h>
 
 namespace pag {
 

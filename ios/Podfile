@@ -1,7 +1,9 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, '9.0'
 ENV["PLATFORM"] = "ios"
-install! 'cocoapods', :deterministic_uuids => false
+#install! 'cocoapods', :deterministic_uuids => false
+
+source 'git@gitlab.ttyuyin.com:cocoapods/repo.git'
 
 targetsArray = ['PAGViewer', 'PAGViewerSlim', 'PAGViewerTest']
 
@@ -14,5 +16,8 @@ targetsArray.each do |t|
     pod 'libpag', :path => '../'
     pod 'Masonry'
     pod 'Toast', '~> 4.0.0'
+    pod 'pathkit'
+    pod 'avcdec'
+    pod 'skcms'
   end
 end

@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "pathkit.h"
+#include <pathkit/pathkit.h>
 
 namespace pag {
 class Path;

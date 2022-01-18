@@ -49,3 +49,5 @@ bool MosaicEffect::verify() const {
                   sharpColors != nullptr);
 }
 }  // namespace pag
+
+

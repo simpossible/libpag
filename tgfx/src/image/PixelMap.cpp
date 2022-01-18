@@ -19,7 +19,7 @@
 #include "PixelMap.h"
 #include "ImageInfo.h"
 #include "platform/Platform.h"
-#include "skcms.h"
+#include <skcms/skcms.h>
 
 namespace pag {
 

@@ -9,7 +9,7 @@
 #import "VideoViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <Photos/Photos.h>
-#import "Masonry.h"
+#import <Masonry/Masonry.h>
 #import "Toast.h"
 #import "CustomVideoCompositing.h"
 
